@@ -1,0 +1,22 @@
+[project]
+name = "demo-02-coverage-isnt-confidence"
+version = "0.1.0"
+description = "Demo 2: 100% coverage with tests that would miss real bugs."
+requires-python = "==3.14.*"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.120",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+]
+
+[tool.uv]
+# The demo is a handful of modules run in place, so there's nothing to build or install.
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

@@ -1,0 +1,1 @@
+Follow the instructions in the `CLAUDE.md` file located in the root of the repo.

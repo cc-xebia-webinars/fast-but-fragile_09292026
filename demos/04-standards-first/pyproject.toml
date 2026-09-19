@@ -1,0 +1,51 @@
+[project]
+name = "demo-04-standards-first"
+version = "0.1.0"
+description = "Demo 4: team standards and Spec Kit that steer Copilot toward quality."
+requires-python = "==3.14.*"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.120",
+    "mypy>=1.15",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+]
+
+[tool.uv]
+# The demo is a handful of modules run in place, so there's nothing to build or install.
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+# Beyond the basics (E, F, I), each rule family maps to a way AI code tends to break:
+#   B    likely bugs, such as mutable defaults
+#   UP   outdated idioms from older training data
+#   S    security issues (the bandit rules)
+#   DTZ  naive datetimes and deprecated utcnow()
+#   BLE  blanket excepts that hide failures
+#   SIM  needlessly complicated code that's harder to review
+select = ["E", "F", "I", "B", "UP", "S", "DTZ", "BLE", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# pytest is built on assert, so the bandit "assert used" rule doesn't apply to tests.
+"tests/**" = ["S101"]
+
+[tool.mypy]
+# mypy flags a hallucinated function name by default, but only inside functions that
+# have type hints. Strict mode requires the hints, so no generated function goes unchecked.
+strict = true
+files = ["src"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+# Deprecated calls are tomorrow's outages. Failing on them keeps outdated patterns out.
+filterwarnings = ["error::DeprecationWarning"]

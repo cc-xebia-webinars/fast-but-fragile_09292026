@@ -1,0 +1,22 @@
+[project]
+name = "demo-01-looks-right"
+version = "0.1.0"
+description = "Demo 1: AI-generated code that looks right and isn't."
+requires-python = "==3.14.*"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+]
+
+[tool.uv]
+# The demo is a handful of modules run in place, so there's nothing to build or install.
+package = false
+
+[tool.pytest.ini_options]
+# Only the happy-path suite runs by default. That's the point of the demo: it's green.
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-q"

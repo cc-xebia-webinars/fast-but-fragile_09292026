@@ -1,0 +1,36 @@
+# The same quality gate that tools/gate.py runs locally, wired into CI.
+#
+# GitHub only runs workflows from the .github folder at the root of a repository,
+# so this file doesn't run from inside the demos folder. Copy it into your own
+# repository's .github/workflows folder to use it. If your project isn't at the
+# repository root, set working-directory below.
+
+name: Quality gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+
+      # --locked fails the build if uv.lock is out of date, so an assistant can't
+      # quietly pull in a new dependency without it showing up in review.
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Run the quality gate
+        run: uv run python tools/gate.py
